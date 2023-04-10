@@ -1,10 +1,10 @@
 package server;
 
 import javafx.util.Pair;
+import server.models.Course;
+import server.models.RegistrationForm;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -91,7 +91,30 @@ public class Server {
      @param arg la session pour laquelle on veut récupérer la liste des cours
      */
     public void handleLoadCourses(String arg) {
-        // TODO: implémenter cette méthode
+        try {
+            //Lecture du fichier cours.txt
+            BufferedReader reader = new BufferedReader(new FileReader("data/cours.txt"));
+            String line;
+            ArrayList<Course> cours = new ArrayList<>();
+
+            //Lecture des lignes
+            while ((line = reader.readLine()) != null){
+                String[] contents = line.split("\t");
+
+                if (contents[2].equals(arg)){
+                    cours.add(new Course(contents[0], contents[1], contents[2]));
+                }
+            }
+            // Fermeture de reader pour eviter des bugs
+            reader.close();
+
+            //Envoi de la liste d'objets cours au client
+            objectOutputStream.writeObject(cours);
+            objectOutputStream.flush();
+
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -100,7 +123,20 @@ public class Server {
      La méthode gére les exceptions si une erreur se produit lors de la lecture de l'objet, l'écriture dans un fichier ou dans le flux de sortie.
      */
     public void handleRegistration() {
-        // TODO: implémenter cette méthode
+        try{
+            //Lecture de Registration form
+            RegistrationForm form = (RegistrationForm) objectInputStream.readObject();
+            //Ecriture des information de registration form dans inscription.txt
+            BufferedWriter writer = new BufferedWriter(new FileWriter("data/inscription.txt", true));
+            writer.write(form.getCourse().getSession()+"\t"+form.getCourse().getCode()+"\t"+form.getMatricule()+
+                    "\t"+form.getPrenom()+"\t"+form.getNom()+"\t"+form.getEmail()+"\n");
+            writer.close();
+            // Renvoi du message de confirmation
+            objectOutputStream.writeObject("Inscription reussie de "+form.getPrenom()+" pour le cours "+form.getCourse().getCode()+"!");
+            objectOutputStream.flush();
+        }catch (ClassNotFoundException | IOException e){
+            e.printStackTrace();
+        }
     }
 }
 
