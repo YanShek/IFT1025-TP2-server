@@ -4,6 +4,7 @@ import javafx.util.Pair;
 import server.models.Course;
 import server.models.RegistrationForm;
 
+
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -93,7 +94,7 @@ public class Server {
     public void handleLoadCourses(String arg) {
         try {
             //Lecture du fichier cours.txt
-            BufferedReader reader = new BufferedReader(new FileReader("data/cours.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader("src/main/java/server/data/cours.txt"));
             String line;
             ArrayList<Course> cours = new ArrayList<>();
 
@@ -127,7 +128,7 @@ public class Server {
             //Lecture de Registration form
             RegistrationForm form = (RegistrationForm) objectInputStream.readObject();
             //Ecriture des information de registration form dans inscription.txt
-            BufferedWriter writer = new BufferedWriter(new FileWriter("data/inscription.txt", true));
+            BufferedWriter writer = new BufferedWriter(new FileWriter("src/main/java/server/data/inscription.txt", true));
             writer.write(form.getCourse().getSession()+"\t"+form.getCourse().getCode()+"\t"+form.getMatricule()+
                     "\t"+form.getPrenom()+"\t"+form.getNom()+"\t"+form.getEmail()+"\n");
             writer.close();

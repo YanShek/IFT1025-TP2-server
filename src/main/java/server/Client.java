@@ -3,6 +3,7 @@ package server;
 import server.models.Course;
 import server.models.RegistrationForm;
 
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -25,9 +26,24 @@ public class Client {
                 System.out.println("Entrez une commande: ");
                 String commande = sc.nextLine();
 
-                if (commande.equals(("charger").toLowerCase())){
+                if (commande.toUpperCase().equals(Server.LOAD_COMMAND)){
+                    String session = "";
                     System.out.println("Entrez la session");
-                    String session = sc.nextLine();
+                    System.out.println("1-Automne");
+                    System.out.println("2- Hiver");
+                    System.out.println("3- Ete");
+                    String sessionChoix = sc.nextLine();
+
+                    switch (sessionChoix){
+                        case "1" -> session = "Automne";
+                        case "2" -> session = "Hiver";
+                        case "3" -> session = "Ete";
+                        default -> {
+                            System.out.println("Choix invalide");
+                            continue;
+                        }
+
+                    }
 
                     objectOutputStream.writeObject(Server.LOAD_COMMAND + " " + session);
                     objectOutputStream.flush();
@@ -51,7 +67,7 @@ public class Client {
                     System.out.println("Entrez votre email :");
                     String email = sc.nextLine();
 
-                    RegistrationForm form = new RegistrationForm(prenom, nom, email, matricule, new Course(code, "", session));
+                    RegistrationForm form = new RegistrationForm(prenom, nom, email, matricule, new Course("",code, session));
                     ObjectOutputStream outputStream = new ObjectOutputStream(socket.getOutputStream());
 
                     outputStream.writeObject(Server.REGISTER_COMMAND);
@@ -60,7 +76,7 @@ public class Client {
                     outputStream.flush();
                     //Message de confirmation
                     String message = (String) objectInputStream.readObject();
-                    System.out.println();
+                    System.out.println(message);
                 }
                 else{
                     System.out.println("Instruction invalide");
