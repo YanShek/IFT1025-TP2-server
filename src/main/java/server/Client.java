@@ -48,6 +48,7 @@ public class Client {
                     ArrayList<Course> cours = (ArrayList<Course>) objectInputStream.readObject();
                     System.out.println("Voici la liste de cours de la session " + session);
                     for (Course courses : cours) {
+
                         System.out.println(courses.getCode() + " - " + courses.getName());
                     }
 

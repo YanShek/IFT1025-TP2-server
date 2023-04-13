@@ -101,9 +101,8 @@ public class Server {
             //Lecture des lignes
             while ((line = reader.readLine()) != null){
                 String[] contents = line.split("\t");
-
                 if (contents[2].equals(arg)){
-                    cours.add(new Course(contents[0], contents[1], contents[2]));
+                    cours.add(new Course(contents[1], contents[0], contents[2]));
                 }
             }
             // Fermeture de reader pour eviter des bugs
