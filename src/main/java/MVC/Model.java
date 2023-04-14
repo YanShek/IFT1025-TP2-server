@@ -50,4 +50,10 @@ public class Model {
             return cours;
         }
     }
+
+    public void inscription(String prenom, String nom, String courriel, String matricule, Course cours){
+
+
+    }
 }
+

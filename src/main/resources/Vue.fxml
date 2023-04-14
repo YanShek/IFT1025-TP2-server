@@ -106,7 +106,7 @@
                                 <TextField id="nomTextField" layoutX="123.0" layoutY="98.0" />
                                 <TextField id="emailTextField" layoutX="123.0" layoutY="136.0" />
                                 <TextField id="matrTextField" layoutX="123.0" layoutY="174.0" />
-                                <Button id="sendBtn" layoutX="111.0" layoutY="234.0" mnemonicParsing="false" text="Envoyer">
+                                <Button id="sendBtn" layoutX="111.0" layoutY="234.0" mnemonicParsing="false" text="Envoyer" onAction="#inscription">
                                     <font>
                                         <Font name="Calisto MT" size="15.0" />
                                     </font>

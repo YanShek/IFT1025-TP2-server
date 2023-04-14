@@ -5,10 +5,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import server.Server;
 import server.ServerLauncher;
 import server.models.Course;
+import server.models.RegistrationForm;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -21,7 +25,7 @@ import java.util.ResourceBundle;
 public class Controller implements Initializable {
     private Model model = new Model();
     private ArrayList<Course> cours = new ArrayList<>();
-    private ArrayList<VBox> coursContent = new ArrayList<>();
+    private VBox selectedVBox;
     @FXML
     ComboBox<String> sessionBox;
     @FXML
@@ -32,40 +36,51 @@ public class Controller implements Initializable {
 
         model.connectServer();
     }
-
     /**
-     * Ceci permet de saisir le cours et son sigle  qu'on a selectionne
-     * @param event Source du clic, soit l'element clicke
+     * Gestion du click d'un VBox qui correspond a un cours
+     * @param event Source du click
      */
     @FXML
     public void handleCoursClicked(MouseEvent event){
-
         VBox clickedCours = (VBox) event.getSource();
-        for (VBox vBox: coursContent){
-            vBox.setStyle("-fx-background-color: #FFFFFF");
+
+        if (selectedVBox != null) {
+            // Reset the background color of the previously selected VBox to white
+            selectedVBox.setStyle("-fx-background-color: #FFFFFF");
         }
-        // On met un arriere plan bleu pour l'element selectionne
-        clickedCours.setStyle("-fx-background-color: #AEC4FF;");
+
+        // Set the background color of the clicked VBox to blue
+        clickedCours.setStyle("-fx-background-color: #AEC4FF");
+        selectedVBox = clickedCours; // Update the selected VBox
     }
 
     /**
-     * Ceci permet l'affichage des cours dans le GUI et cree egalement les elements pour
+     * Charge et affiche les cours dans le GUI
      */
     @FXML
     public void loadCours(){
         cours = model.loadCours(sessionBox.getValue());
+        displayCours.getChildren().clear(); // Clear the existing VBox children
         for (Course course: cours){
-            Label label = new Label(course.getCode() +"\t\t\t" + course.getName());
-            System.out.println(course.getCode());
-            VBox vBox = new VBox(label);
-            // Ajoute l'attribut on clicked pour chaque VBox
-            vBox.setOnMouseClicked(event -> {
-                handleCoursClicked((MouseEvent) event.getTarget());
-            });
-            vBox.setStyle("-fx-border-color: #000000; -fx-border-width: 1px;");
-            coursContent.add(vBox);
+            Text text = new Text(course.getCode() +"\t\t\t" + course.getName());
+            VBox vBox = new VBox(text);
+            vBox.setOnMouseClicked(this::handleCoursClicked); // Set the click event handler
             displayCours.getChildren().add(vBox);
         }
     }
+    @FXML TextField prenomTxtField;
+    @FXML TextField nomTextField;
+    @FXML TextField emailTextField;
+    @FXML TextField matrTextField;
+    @FXML
+    public void inscription(){
 
+        String prenom = prenomTxtField.getText();
+        String nom = nomTextField.getText();
+        String email = emailTextField.getText();
+        int matricule = Integer.valueOf(matrTextField.getText());
+        String session = sessionBox.getValue();
+
+
+    }
 }

@@ -19,7 +19,6 @@ public class Main extends Application {
 
         Scene scene = new Scene(root, 600, 400);
         stage.setTitle("Inscription a un cours");
-        stage.getIcons().add(new Image("file: ezgif.com-video-to-gif.gif"));
         stage.setScene(scene);
         stage.show();
     }
